@@ -1,4 +1,5 @@
 <?php
+include 'function.php';
 session_start();
 //Si une session est deja ouverte
 if(!empty($_SESSION['user'])):
