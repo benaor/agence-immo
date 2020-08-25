@@ -176,7 +176,7 @@ function inscription(){
 
 function addLogement(){
         //on se connecte a la base de données
-        $bdd = new PDO('mysql:host=localhost:3308;dbname=agence_immo','root','');
+        $bdd = new PDO('mysql:host=localhost;dbname=agence_immo','root','root');
 
         if(    isset(   $_POST['add_logement']  )   ){
     
@@ -192,7 +192,7 @@ function addLogement(){
                 !empty($_POST['quartier']) ){
     
                     //On ajoute le logement dans la base de données
-                    $insertlgt = $bdd->prepare("INSERT INTO logement(type_logement, loyer_logement, superficie_logement, quartier_logement) VALUES (?, ?, ?, ?)");
+                    $insertlgt = $bdd->prepare("INSERT INTO logement(type, loyer, superficie, quartier) VALUES (?, ?, ?, ?)");
                     $insertlgt->execute(array($type, $loyer, $superficie, $quartier));
                     header('location:logement.php');
             }
@@ -210,7 +210,7 @@ function addLogement(){
 function recapLogement(){
         
     //on se connecte a la base de données
-    $bdd = new PDO('mysql:host=localhost:3308;dbname=agence_immo','root','');
+    $bdd = new PDO('mysql:host=localhost;dbname=agence_immo','root','root');
 
 
         //On recupère les données de la table location
@@ -223,7 +223,7 @@ function recapLogement(){
             while($listeLogement = $listeLogementBrut->fetch()){
         
                 //on affiche les données de chaque logement
-                echo "<li>un ".$listeLogement['type_logement']." d'une superficie de ".$listeLogement['superficie_logement']."m² loué ".$listeLogement['loyer_logement']."€ Hors Charges, dans le quartier ".$listeLogement['quartier_logement'].
+                echo "<li>un ".$listeLogement['type']." d'une superficie de ".$listeLogement['superficie']."m² loué ".$listeLogement['loyer']."€ Hors Charges, dans le quartier ".$listeLogement['quartier'].
         
                 //ajout du lien vers modification et suppression
                 "\ \ \ \ \ \ <a href='modification_logement.php?logement_id=".$listeLogement['id']."'>modifier </a>
