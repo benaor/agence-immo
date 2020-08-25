@@ -6,7 +6,7 @@ if(!empty($_SESSION['user'])):
 else:
 
     //on se connecte a la base de données
-    $bdd = new PDO('mysql:host=localhost:3308;dbname=agence_immo','root','');
+    $bdd = new PDO('mysql:host=localhost;dbname=agence_immo','root','root');
 
     //lorsqu'on clique sur submit
     if(   isset(   $_POST['connexion'])   ){
@@ -19,11 +19,11 @@ else:
         if(  !empty($_POST['user'])   &&   !empty($_POST['password'])  ){
 
             // On compare l'identifiant et le mdp saisi avec ceux de la base de données
-            $reqidentification = $bdd->query("SELECT * FROM membres WHERE identifiant_membre = '$user' AND mdp_membre = '$password'");
+            $reqidentification = $bdd->query("SELECT * FROM membres WHERE identifiant = '$user' AND mdp = '$password'");
             $tableau = $reqidentification->fetch(PDO::FETCH_ASSOC);
 
             if(is_array($tableau)){
-                $_SESSION['user']=$tableau['identifiant_membre'];
+                $_SESSION['user']=$tableau['identifiant'];
                 echo "redirection vers votre espace membre";
                 header('location:espace.php');
             }

@@ -78,7 +78,7 @@ function suppressionLogement(){
 function inscription(){
 
         //on se connecte a la base de données
-        $bdd = new PDO('mysql:host=localhost:3308;dbname=agence_immo','root','');
+        $bdd = new PDO('mysql:host=localhost;dbname=agence_immo','root','root');
 
         //si on clique sur le bouton "je m'inscris"
         if(   isset(   $_POST['inscription']   )   ){
@@ -113,14 +113,14 @@ function inscription(){
                                 if(filter_var($mail, FILTER_VALIDATE_EMAIL)){
 
                                     //On verifie que l'identifiant ne soit pas deja utilisé
-                                    $reqid = $bdd->prepare("SELECT * FROM membres WHERE identifiant_membre = ?");
+                                    $reqid = $bdd->prepare("SELECT * FROM membres WHERE identifiant = ?");
                                     $reqid->execute(array($identifiant));
                                     $idexist = $reqid->rowCount();
 
                                     if($idexist == 0){
                                         
                                         //on insert les données dans la table "user"
-                                        $insertmbr = $bdd->prepare("INSERT INTO membres(nom_membre, prenom_membre, tel_membre, mail_membre, agence_membre, identifiant_membre, mdp_membre) VALUES(?,?,?,?,?,?,?)");
+                                        $insertmbr = $bdd->prepare("INSERT INTO membres(nom, prenom, tel, email, agence, identifiant, mdp) VALUES(?,?,?,?,?,?,?)");
                                         $insertmbr->execute(array($nom, $prenom, $tel, $mail, $agence, $identifiant, $mdp));
                                     
                                         //On redirige automatiquement vers index.php
@@ -420,6 +420,5 @@ function recapContrat(){
                                        ON id_logement = logement.id
                                     ");
 
-    echo $
 }
 ?>
