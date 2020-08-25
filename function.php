@@ -1,6 +1,5 @@
 <?php
 
-
 function modificationLogement(){
 
     //on se connecte a la base de données
@@ -238,14 +237,14 @@ function recapLogement(){
 function recapLocataire(){
             
     //on se connecte a la base de données
-    $bdd = new PDO('mysql:host=localhost:3308;dbname=agence_immo','root','');
+    $bdd = new PDO('mysql:host=localhost;dbname=agence_immo','root','root');
 
     //On recupère les données de la table locataire
     $recapLocataireBrut = $bdd->query("SELECT * FROM locataire");
 
     while($recapLocataire = $recapLocataireBrut->fetch()){
 
-        echo "<li>".$recapLocataire['nom_locataire']." ".$recapLocataire['prenom_locataire']." née le ".$recapLocataire['naissance_locataire'].". Tel : ".$recapLocataire['tel_locataire']."
+        echo "<li>".$recapLocataire['nom']." ".$recapLocataire['prenom']." née le ".$recapLocataire['naissance'].". Tel : ".$recapLocataire['tel']."
         |||||||||||||||||||<a href='modification_locataire.php?locataire_id=".$recapLocataire['id']."'> modifier </a>
         |||||||||||||||||||<a href='suppression_locataire.php?locataire_id=".$recapLocataire['id']."'> supprimer </a>
         </li><br>";
@@ -255,7 +254,7 @@ function recapLocataire(){
 
 function addLocataire(){
     //on se connecte a la base de données
-    $bdd = new PDO('mysql:host=localhost:3308;dbname=agence_immo','root','');
+    $bdd = new PDO('mysql:host=localhost;dbname=agence_immo','root','root');
 
     if(    isset(   $_POST['addLocataire']  )   ){
 
@@ -271,7 +270,7 @@ function addLocataire(){
             !empty($_POST['tel']) ){
 
                 //On ajoute le logement dans la base de données
-                $insertlgt = $bdd->prepare("INSERT INTO locataire(nom_locataire, prenom_locataire, naissance_locataire, tel_locataire) VALUES (?, ?, ?, ?)");
+                $insertlgt = $bdd->prepare("INSERT INTO locataire(nom, prenom, naissance, tel) VALUES (?, ?, ?, ?)");
                 $insertlgt->execute(array($nomLoc, $prenomLoc, $naissanceLoc, $telLoc));
                 header('location:locataire.php');
         }
@@ -362,7 +361,7 @@ function suppressionLocataire(){
 function selectLocataire(){
 
          //on se connecte a la base de données
-         $bdd = new PDO('mysql:host=localhost:3308;dbname=agence_immo','root','');
+         $bdd = new PDO('mysql:host=localhost;dbname=agence_immo','root','root');
 
          //On recupère les données de locataire
          $selectLocataireBrut = $bdd->query("SELECT * FROM locataire");
@@ -370,14 +369,14 @@ function selectLocataire(){
          //On crée un select par personne
          while($selectLocataire = $selectLocataireBrut->fetch()){
             
-            echo "<option value='".$selectLocataire['id']."'>".$selectLocataire['nom_locataire']." ".$selectLocataire['prenom_locataire']."</option>";
+            echo "<option value='".$selectLocataire['id']."'>".$selectLocataire['nom']." ".$selectLocataire['prenom']."</option>";
          }
 }
 
 function selectLogement(){
 
     //on se connecte a la base de données
-    $bdd = new PDO('mysql:host=localhost:3308;dbname=agence_immo','root','');
+    $bdd = new PDO('mysql:host=localhost;dbname=agence_immo','root','root');
 
     //On recupère les données de locataire
     $selectLogementBrut = $bdd->query("SELECT * FROM logement");
@@ -385,14 +384,14 @@ function selectLogement(){
     //On crée un select par personne
     while($selectLogement = $selectLogementBrut->fetch()){
        
-       echo "<option value='".$selectLogement['id']."'>".$selectLogement['id']."  qui est situé dans le quartier ".$selectLogement['quartier_logement']."</option>";
+       echo "<option value='".$selectLogement['id']."'>".$selectLogement['id']."  qui est situé dans le quartier ".$selectLogement['quartier']."</option>";
     }
 }
 
 function ajoutContrat(){
 
     //on se connecte a la base de données
-    $bdd = new PDO('mysql:host=localhost:3308;dbname=agence_immo','root','');
+    $bdd = new PDO('mysql:host=localhost;dbname=agence_immo','root','root');
 
     //On recupère les données de contrat
     $donneesContratBrut = $bdd->query("SELECT * FROM logement
@@ -403,6 +402,7 @@ function ajoutContrat(){
         if(!empty($_GET['locataire']) && !empty($_GET['logement'])){
             $sqlAdd = "INSERT INTO contrat (id_locataire, id_logement) VALUES('".$_GET['locataire']."', '".$_GET['logement']."') ";
             $test= $bdd->query($sqlAdd);
+            header('location:contrat.php');
         }  
 
 }
@@ -410,7 +410,7 @@ function ajoutContrat(){
 function recapContrat(){
 
     //on se connecte a la base de données
-    $bdd = new PDO('mysql:host=localhost:3308;dbname=agence_immo','root','');
+    $bdd = new PDO('mysql:host=localhost;dbname=agence_immo','root','root');
 
     //On recupère les données de contrat
     $donneesContratBrut = $bdd->query("SELECT * FROM contrat
@@ -420,5 +420,18 @@ function recapContrat(){
                                        ON id_logement = logement.id
                                     ");
 
+    //On ouvre la liste a puces
+    echo "<ul>";
+    
+        //On lance la boucle qui affichera tous les logements repertorié sur le site
+        while($donneesContrat = $donneesContratBrut->fetch()){
+    
+            //on affiche les données de chaque logement
+            echo "<li>le locataire  ".$donneesContrat['nom']." loue actuellement un ".$donneesContrat['type']." pour ".$donneesContrat['loyer']."€ Hors Charges, dans le quartier ".$donneesContrat['quartier'] ;
+    
+        }
+    
+        echo "</ul>";
 }
+
 ?>
